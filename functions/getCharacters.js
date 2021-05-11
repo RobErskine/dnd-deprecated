@@ -41,13 +41,13 @@ exports.handler = async (event, context) => {
     }
   
     await browser.close();
+    
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        data: characters,
+        characterData: charData
+      })
+    }
   })().catch(console.error)
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      data: characters,
-      characterData: charData
-    })
-  }
 }
