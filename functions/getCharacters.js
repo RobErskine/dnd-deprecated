@@ -39,7 +39,7 @@ exports.handler = async (event, context) => {
     }
 
     await browser.close();
-    return charData;
+    return await charData;
   }
 
   return {
