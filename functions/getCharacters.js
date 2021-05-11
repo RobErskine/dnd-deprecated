@@ -36,10 +36,9 @@ exports.handler = async (event, context) => {
       char['level'] = charLevel;
   
       charData.push(char);
-  
-      return charData;
     }
-  
+    
+    return charData;
     await browser.close();
   }
 
