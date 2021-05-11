@@ -11,9 +11,9 @@ exports.handler = async (event, context) => {
     const executablePath = await chromium.executablePath
   
     const browser = await chromium.puppeteer.launch({
-        args: await chromium.args,
-        executablePath: executablePath,
-        headless: true,
+      args: await chromium.args,
+      executablePath: executablePath,
+      headless: true,
     });
 
   
@@ -26,9 +26,9 @@ exports.handler = async (event, context) => {
       await page.evaluateHandle('document.fonts.ready');
 
       const name = await content.$(".ddbc-character-name ");
-      const gameName = await page.evaluate(name => name.innerText, name);
+      const playerName = await page.evaluate(name => name.innerText, name);
 
-      console.log(gameName);
+      charData.push(playerName);
 
       await page.close();
     }
@@ -39,7 +39,8 @@ exports.handler = async (event, context) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      data: characters
+      data: characters,
+      characterData: charData
     })
   }
 }
