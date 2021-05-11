@@ -1,7 +1,7 @@
 const chromium = require('chrome-aws-lambda');
 
 const config = require('./dnd.json')
-const characters = config.characters;
+const characters = config.characters
 let charData = []
 
 async function getCharacters() {
