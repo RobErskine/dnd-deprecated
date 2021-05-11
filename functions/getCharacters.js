@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer-core');
 const chromium = require('chrome-aws-lambda')
 
-const config = require('~/dnd.json')
+const config = require('../dnd.json')
 const characters = config.characters
 let charData = []
 
