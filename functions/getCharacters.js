@@ -2,10 +2,9 @@ const chromium = require('chrome-aws-lambda');
 
 const config = require('../dnd.json')
 const characters = config.characters;
+let charData = []
 
 exports.handler = async (event, context) => {
-
-  let charData = []
 
   ;(async function() {
     const executablePath = await chromium.executablePath
@@ -15,22 +14,30 @@ exports.handler = async (event, context) => {
       executablePath: executablePath,
       headless: true,
     });
-
+  
+    const page = await browser.newPage();
   
     for(i=0;i < characters.length; i++){
-      let state = pages[i];
-
-      const page = await browser.newPage();
+      console.log(characters[i])
+      await page.goto(characters[i], {
+        waitUntil: 'networkidle2'
+      })
   
-      await page.goto(characters[i]);
-      await page.evaluateHandle('document.fonts.ready');
-
-      const name = await content.$(".ddbc-character-name ");
-      const playerName = await page.evaluate(name => name.innerText, name);
-
-      charData.push(playerName);
-
-      await page.close();
+      const charName =  await page.$eval('.ddbc-character-name', el => el.innerText);
+      const charInfo = await page.$eval('.ddbc-character-summary__classes', el => el.innerText);
+      const charClassLevel = charInfo.split(' ');
+      const charClass = charClassLevel[0];
+      const charLevel = parseInt(charClassLevel[1]);
+  
+      let char = {}
+  
+      char['name'] = charName;
+      char['class'] = charClass;
+      char['level'] = charLevel;
+  
+      charData.push(char);
+  
+      console.log(charData);
     }
   
     await browser.close();
