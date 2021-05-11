@@ -37,7 +37,7 @@ exports.handler = async (event, context) => {
   
       charData.push(char);
     }
-    
+
     await browser.close();
     return charData;
   }
@@ -45,8 +45,8 @@ exports.handler = async (event, context) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      data: await characters,
-      characterData: await getCharacters()
+      data: characters,
+      characterData: getCharacters()
     })
   }
 }

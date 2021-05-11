@@ -16,7 +16,6 @@ async function getCharacters() {
   const page = await browser.newPage();
 
   for(i=0;i < characters.length; i++){
-    console.log(characters[i])
     await page.goto(characters[i], {
       waitUntil: 'networkidle2'
     })
@@ -37,6 +36,8 @@ async function getCharacters() {
   }
 
   await browser.close();
+  console.log(charData);
+  return charData;
 }
 
 return {
