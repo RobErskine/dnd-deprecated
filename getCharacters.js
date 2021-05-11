@@ -4,7 +4,7 @@ const config = require('./dnd.json')
 const characters = config.characters;
 let charData = []
 
-;(async function() {
+async function getCharacters() {
   const executablePath = await chromium.executablePath
 
   const browser = await chromium.puppeteer.launch({
@@ -34,17 +34,15 @@ let charData = []
     char['level'] = charLevel;
 
     charData.push(char);
-
-    console.log(charData);
   }
 
   await browser.close();
-})().catch(console.error)
+}
 
 return {
   statusCode: 200,
   body: JSON.stringify({
     data: characters,
-    characterData: charData
+    characterData: getCharacters()
   })
 }

@@ -6,7 +6,7 @@ let charData = []
 
 exports.handler = async (event, context) => {
 
-  ;(async function getCharacters() {
+  async function getCharacters() {
     const executablePath = await chromium.executablePath
   
     const browser = await chromium.puppeteer.launch({
@@ -37,17 +37,17 @@ exports.handler = async (event, context) => {
   
       charData.push(char);
   
-      return charData
+      return charData;
     }
   
     await browser.close();
-    
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        data: await characters,
-        characterData: await getCharacters()
-      })
-    }
-  })().catch(console.error)
+  }
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      data: await characters,
+      characterData: await getCharacters()
+    })
+  }
 }
