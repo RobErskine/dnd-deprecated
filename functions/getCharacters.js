@@ -38,8 +38,8 @@ exports.handler = async (event, context) => {
       charData.push(char);
     }
     
-    return charData;
     await browser.close();
+    return charData;
   }
 
   return {
