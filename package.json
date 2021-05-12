@@ -14,7 +14,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/pwa": "^3.3.5",
-    "chrome-aws-lambda": "^7.0.0",
+    "chrome-aws-lambda": "^9.1.0",
     "core-js": "^3.9.1",
     "nuxt": "^2.15.3",
     "puppeteer-core": "^8.0.0"
