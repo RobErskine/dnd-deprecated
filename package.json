@@ -40,6 +40,9 @@
     "osmosis": "^1.1.10",
     "postcss": "^8.2.8",
     "puppeteer": "^8.0.0",
+    "netlify-lambda": "^1.6.3",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.6",
     "vue-jest": "^3.0.4"
   }
 }

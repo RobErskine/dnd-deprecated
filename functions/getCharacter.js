@@ -1,53 +1,36 @@
-const chromium = require('chrome-aws-lambda')
-const puppeteer = require('puppeteer-core')
+const rp = require('request-promise')
+const cheerio = require('cheerio')
 
-exports.handler = async (event, context) => {
-  let theTitle = null
-  let browser = null
-  console.log('spawning chrome headless')
-  try {
-    const executablePath = await chromium.executablePath
+exports.handler = async function (event, context) {
+  const getDetails = async function (url) {
+    const data = rp(url, { timeout: 2000000 }).then(function (htmlString) {
+      const $ = cheerio.load(htmlString)
 
-    // setup
-    browser = await puppeteer.launch({
-      args: chromium.args,
-      executablePath: executablePath,
-      headless: chromium.headless,
+      const name = $('head > title').text()
+      const description = $('meta[name="description"]').attr('content')
+      const currentHealth = $('.ct-health-summary__hp-number').text()
+      const totalHealth = $('.ct-health-summary__hp-number').text()
+
+      return {
+        name,
+        description,
+        currentHealth,
+        totalHealth
+      }
     })
-
-    // Do stuff with headless chrome
-    const page = await browser.newPage()
-    const targetUrl = 'https://davidwells.io'
-
-    // Goto page and then do stuff
-    await page.goto(targetUrl, {
-      waitUntil: ['domcontentloaded', 'networkidle0']
-    })
-
-    await page.waitForSelector('.lets-talk')
-
-    theTitle = await page.title()
-
-    console.log('done on page', theTitle)
-  } catch (error) {
-    console.log('error', error)
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        error: error
-      })
-    }
-  } finally {
-    // close browser
-    if (browser !== null) {
-      await browser.close()
-    }
+    return data
   }
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      title: theTitle,
-    })
+  try {
+    // if (event.queryStringParameters.apiKey != process.env.API_KEY) throw "Not Authorized";
+
+    const url = event.queryStringParameters.url
+
+    const details = await getDetails(url)
+    // const savedResponse = await saveBookmark ({url, ...details})
+
+    return { statusCode: 200, body: JSON.stringify({ details }) }
+  } catch (err) {
+    return { statusCode: 500, body: `Error: ${err}` }
   }
 }
