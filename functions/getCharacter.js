@@ -17,14 +17,14 @@ exports.handler = async (event, context) => {
 
     // Do stuff with headless chrome
     const page = await browser.newPage()
-    const targetUrl = 'https://www.dndbeyond.com/characters/25876496'
+    const targetUrl = 'https://davidwells.io'
 
     // Goto page and then do stuff
     await page.goto(targetUrl, {
       waitUntil: ['domcontentloaded', 'networkidle0']
     })
 
-    await page.waitForSelector('.ddbc-character-name')
+    await page.waitForSelector('.lets-talk')
 
     theTitle = await page.title()
 
